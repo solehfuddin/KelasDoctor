@@ -22,7 +22,8 @@ const styles = StyleSheet.create({
     },
     widget: {
         fontSize: 20,
-        fontWeight: '600',
+        // fontWeight: '600',
+        fontFamily:'Nunito-SemiBold',
         color: '#112340',
         marginTop: 20
     }

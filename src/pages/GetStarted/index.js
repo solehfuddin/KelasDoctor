@@ -2,6 +2,7 @@ import React from 'react'
 import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import { ILGetStarted, ILLogo } from '../../assets'
 import { CustomButton } from '../../components'
+import GapSpace from '../../components/atoms/GapSpace'
 
 const GetStarted = () => {
     return (
@@ -13,7 +14,7 @@ const GetStarted = () => {
 
             <View>
                 <CustomButton title='Get Started'/>
-                <View style={{height:16}}/>
+                <GapSpace gapHeight={16}/>
                 <CustomButton type='Secondary' title='Sign In'/>
             </View>
         </ImageBackground>
@@ -30,7 +31,8 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize:28,
-        fontWeight:'600',
+        // fontWeight:'600',
+        fontFamily:'Nunito-SemiBold',
         color:'white',
         marginTop:91
     }

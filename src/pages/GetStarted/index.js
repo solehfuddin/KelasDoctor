@@ -4,7 +4,7 @@ import { ILGetStarted, ILLogo } from '../../assets'
 import { CustomButton } from '../../components'
 import GapSpace from '../../components/atoms/GapSpace'
 
-const GetStarted = () => {
+const GetStarted = ({navigation}) => {
     return (
         <ImageBackground source={ILGetStarted} style={styles.pages}>
             <View>
@@ -13,9 +13,9 @@ const GetStarted = () => {
             </View>
 
             <View>
-                <CustomButton title='Get Started'/>
+                <CustomButton title='Get Started' onPress={() => navigation.navigate('Register')}/>
                 <GapSpace gapHeight={16}/>
-                <CustomButton type='Secondary' title='Sign In'/>
+                <CustomButton type='Secondary' title='Sign In' onPress={() => navigation.navigate('SignIn')}/>
             </View>
         </ImageBackground>
     )

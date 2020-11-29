@@ -3,6 +3,8 @@ import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import { ILGetStarted, ILLogo } from '../../assets'
 import { CustomButton } from '../../components'
 import GapSpace from '../../components/atoms/GapSpace'
+import { MyFonts } from '../../utils'
+import { MyColors } from '../../utils/MyColors'
 
 const GetStarted = ({navigation}) => {
     return (
@@ -31,9 +33,8 @@ const styles = StyleSheet.create({
     },
     heading: {
         fontSize:28,
-        // fontWeight:'600',
-        fontFamily:'Nunito-SemiBold',
-        color:'white',
+        fontFamily: MyFonts.primary[600],
+        color:MyColors.white,
         marginTop:91
     }
 })

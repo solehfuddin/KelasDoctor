@@ -1,13 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 import { MyFonts } from '../../../utils'
 import { MyColors } from '../../../utils/MyColors'
 
-const TextLinkCustom = ({title, size, alignText}) => {
+const TextLinkCustom = ({title, size, alignText, onPress}) => {
     return (
-        <View>
+        <TouchableOpacity onPress={onPress}>
             <Text style={styles.title(size, alignText)}>{title}</Text>
-        </View>
+        </TouchableOpacity>
     )
 }
 

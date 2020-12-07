@@ -1,14 +1,18 @@
 import React from 'react'
-import { StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native';
 import Router from './router';
+import FlashMessage from "react-native-flash-message";
 
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Router />
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Router />
+      </NavigationContainer>
+      <FlashMessage position="top" />
+    </>
   )
 }
 

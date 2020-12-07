@@ -1,13 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { MyFonts } from '../../../utils'
 import { MyColors } from '../../../utils/MyColors'
 
-const TextInputCustom = ({label}) => {
+const TextInputCustom = ({ label, value, onChangeText, secureTextEntry, disable }) => {
+    const [borderState, setBorderState] = useState(MyColors.border)
+    const onFocusText = () => {
+        setBorderState(MyColors.primary)
+    }
+    const onBlurText = () => {
+        setBorderState(MyColors.border)
+    }
+
     return (
         <View>
             <Text style={styles.label}>{label}</Text>
-            <TextInput style={styles.input}/>
+            <TextInput
+                onFocus={onFocusText}
+                onBlur={onBlurText}
+                value={value}
+                onChangeText={onChangeText}
+                secureTextEntry={secureTextEntry}
+                editable={!disable}
+                selectTextOnFocus={!disable}
+                style={styles.input(borderState)} />
         </View>
     )
 }
@@ -15,12 +31,14 @@ const TextInputCustom = ({label}) => {
 export default TextInputCustom
 
 const styles = StyleSheet.create({
-    input : {
-        borderWidth: 1,
-        borderRadius: 10,
-        borderColor: MyColors.border,
-        padding: 12,
-    },
+    input: (borderState) => (
+        {
+            borderWidth: 1,
+            borderRadius: 10,
+            borderColor: borderState,
+            padding: 12,
+        }
+    ),
     label: {
         fontSize: 16,
         color: MyColors.text.secondary,

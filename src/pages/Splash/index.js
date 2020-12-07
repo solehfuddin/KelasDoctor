@@ -1,14 +1,27 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ILLogo } from '../../assets'
+import { FireConfig } from '../../config';
 import { MyFonts } from '../../utils';
 import { MyColors } from '../../utils/MyColors';
 
-const splash = ({navigation}) => {
+const splash = ({ navigation }) => {
     useEffect(() => {
-        setTimeout(() => {
-            navigation.replace('GetStarted');
-        }, 3000);
+        const unsubscribe =  FireConfig.auth().onAuthStateChanged(result => {
+            setTimeout(() => {
+                if (result) {
+                    //Masih ada sesi login (default firebase 1 jam)
+                    console.log('Session : ', result);
+                    navigation.replace('MainApp');
+                }
+                else {
+                    //Tidak ada sesi
+                    navigation.replace('GetStarted');
+                }
+            },  3000);
+        });
+
+        return () => unsubscribe();
     }, [navigation]);
     return (
         <View style={styles.pages}>

@@ -9,12 +9,6 @@ import { getData, MyUseForm, storeData } from '../../utils'
 import { showMessage } from "react-native-flash-message"
 
 const Register = ({ navigation }) => {
-    //static state
-    // const [fullname, setFullname] = useState('');
-    // const [pekerjaan, setPekerjaan] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-
     const [form, setForm] = MyUseForm(
         {
             fullname: '',
@@ -29,9 +23,8 @@ const Register = ({ navigation }) => {
 
     const onContinue = () => {
         console.log('Menekan fungsi onContinue');
-        //console.log(fullname, pekerjaan, email, password);
         setLoader(true);
-        
+
         FireConfig.auth().createUserWithEmailAndPassword(form.email, form.password)
             .then((success) => {
                 setLoader(false);
@@ -46,8 +39,8 @@ const Register = ({ navigation }) => {
 
                 //Api storage
                 FireConfig.database()
-                .ref('users/' + success.user.uid + '/')
-                .set(user);
+                    .ref('users/' + success.user.uid + '/')
+                    .set(user);
 
                 //Lokal storage
                 storeData('user', user);
@@ -63,7 +56,7 @@ const Register = ({ navigation }) => {
                 showMessage({
                     message: errorCode,
                     description: errorMsg,
-                    type:"success",
+                    type: "success",
                     backgroundColor: MyColors.error,
                     color: MyColors.white,
                 });
@@ -110,7 +103,7 @@ const Register = ({ navigation }) => {
                 </View>
             </View>
 
-            { loader &&  <LoadingInfo />}
+            { loader && <LoadingInfo />}
         </>
     )
 }

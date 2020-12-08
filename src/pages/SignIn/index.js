@@ -23,7 +23,7 @@ const SignIn = ({ navigation }) => {
                 FireConfig.database().ref(`users/${result.user.uid}/`).once('value')
                     .then(resultVal => {
                         console.log('Data user : ', resultVal.val());
-                        // storeData('user', '');
+                        
                         if (resultVal.val()) {
                             storeData('user', resultVal.val())
                                 .then(() => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { CustomButton, GapSpace, HeaderNav, Profile, TextInputCustom } from '../../components'
 import { getData, MyColors, storeData } from '../../utils'
@@ -17,15 +17,20 @@ const UpdateProfile = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [photoFire, setPhotoFire] = useState('');
     const [photo, setPhoto] = useState(ILNullPhoto);
+    const [isChangePhoto, setChangePhoto] = useState(false);
 
     useEffect(() => {
         getData('user').then(result => {
-            console.log('Update profile data : ', result);
+            console.log('Async Update profile : ', result);
             const data = result;
-            data.photoForDB = result?.photo?.length > 1 ? result.photo : ILNullPhoto;
-            const tempPhoto = result?.photo?.length > 1 ? {uri: result.photo} : ILNullPhoto;
-            // data.photo = { uri: result.photo };
-            setPhoto(tempPhoto);
+            if (result?.photo?.length > 1) {
+                data.photo = { uri: result.photo };
+            }
+            else {
+                ILNullPhoto
+            };
+
+            setPhoto(data.photo);
             setProfile(data);
         });
     }, []);
@@ -77,23 +82,37 @@ const UpdateProfile = ({ navigation }) => {
 
     const updateProfileData = () => {
         const data = profile;
-        data.photo = photoFire;
+        if (isChangePhoto) {
+            if (photoFire?.length > 0) {
+                data.photo = photoFire;
+            }
+        }
+        else {
+            if (photo != ILNullPhoto) {
+                const img = photo.uri;
+                data.photo = img;
+            }
+            else {
+                data.photo = '';
+            }
+        }
         FireConfig.database().ref(`users/${profile.uid}/`).update(data)
             .then(() => {
                 console.log('Update success : ', data);
+
                 storeData('user', data)
-                .then(() => {
-                    navigation.replace('MainApp');
-                })
-                .catch(() => {
-                    showMessage({
-                        message: "Uppss.. something wrong",
-                        description: "Error when saving local data",
-                        backgroundColor: MyColors.error,
-                        console: MyColors.white,
-                        type: 'default',
+                    .then(() => {
+                        navigation.replace('MainApp');
+                    })
+                    .catch(() => {
+                        showMessage({
+                            message: "Uppss.. something wrong",
+                            description: "Error when saving local data",
+                            backgroundColor: MyColors.error,
+                            console: MyColors.white,
+                            type: 'default',
+                        });
                     });
-                });
             })
             .catch(error => {
                 showMessage({
@@ -110,6 +129,7 @@ const UpdateProfile = ({ navigation }) => {
         ImagePicker.launchCamera({ quality: 0.5, maxWidth: 200, maxHeight: 200 }, response => {
             console.log("Response : ", response);
             if (response.didCancel) {
+                setChangePhoto(false);
                 showMessage({
                     message: "Has an error occured",
                     description: "Please make sure you have choose an image",
@@ -119,6 +139,7 @@ const UpdateProfile = ({ navigation }) => {
                 });
             }
             else if (response.error) {
+                setChangePhoto(false);
                 showMessage({
                     message: "Has an error occured",
                     description: response.error,
@@ -132,6 +153,7 @@ const UpdateProfile = ({ navigation }) => {
                 setPhoto(source);
                 console.log('Response : ', response);
                 setPhotoFire(`data:${response.type};base64, ${response.data}`);
+                setChangePhoto(true);
             }
         });
     }

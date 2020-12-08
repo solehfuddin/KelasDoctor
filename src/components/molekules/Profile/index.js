@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { DummyUser, IconRemovePhoto } from '../../../assets'
+import { IconRemovePhoto } from '../../../assets'
 import { MyColors, MyFonts } from '../../../utils'
 
 const Profile = ({ name, desc, photo, isRemove, onPress }) => {

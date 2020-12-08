@@ -1,18 +1,51 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
-import { JsonCategoryDoctor, JsonNewsDoctor, JsonRatedDoctor } from '../../assets'
+import { ILNullPhoto, JsonCategoryDoctor, JsonNewsDoctor, JsonRatedDoctor } from '../../assets'
 import { DoctorCategory, GapSpace, HomeProfile, NewsItem, RatedDoctor } from '../../components'
-import { MyColors, MyFonts } from '../../utils'
+import { MyColors, MyFonts, getData, storeData } from '../../utils'
 
-const Doctor = ({navigation}) => {
+const Doctor = ({ navigation }) => {
+    const [profile, setProfile] = useState({
+        fullname: 'User',
+        pekerjaan: 'Pekerjaan',
+        photo: ILNullPhoto,
+    });
+
+    useEffect(() => {
+        getData('user').then(result => {
+            console.log('Async Home Profile : ', result);
+            result.photo = result?.photo?.length > 1 ? { uri: result.photo } : ILNullPhoto;
+
+            storeData('user', result)
+                .catch(() => {
+                    showMessage({
+                        message: "Uppss.. something wrong",
+                        description: "Local storage couldn't save",
+                        backgroundColor: MyColors.error,
+                        console: MyColors.white,
+                        type: 'default',
+                    });
+                });
+            setProfile(result);
+        });
+    }, []);
+
+    const openUserProfile = () => {
+        navigation.navigate('UserProfile', profile);
+    }
+
     return (
         <View style={styles.page}>
             <View style={styles.content}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <View style={styles.wrapperSection}>
                         <GapSpace gapHeight={30} />
-                        <HomeProfile onPress={() => navigation.navigate('UserProfile')}/>
+                        <HomeProfile
+                            photo={profile.photo}
+                            fullname={profile.fullname}
+                            pekerjaan={profile.pekerjaan}
+                            onPress={openUserProfile} />
                         <Text style={styles.welcome}>Mau konsultasi dengan siapa hari ini?</Text>
                     </View>
                     <View style={styles.wrapperScroll}>

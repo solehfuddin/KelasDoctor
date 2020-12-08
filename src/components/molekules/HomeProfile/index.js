@@ -1,46 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Image, StyleSheet, Text, View } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { DummyUser, ILNullPhoto } from '../../../assets'
-import { getData, MyColors, MyFonts, storeData } from '../../../utils'
+import { MyColors, MyFonts } from '../../../utils'
 
-const HomeProfile = ({ onPress }) => {
-    const [profile, setProfile] = useState({
-        fullname: 'User',
-        pekerjaan: 'Pekerjaan',
-        photo: ILNullPhoto,
-    });
-
-    useEffect(() => {
-        getData('user').then(result => {
-            console.log('Async Home Profile : ', result);
-            const img = result;
-            img.photo = result?.photo?.length > 1 ? {uri: result.photo} : ILNullPhoto;
-      
-            // img.photo = {uri : result.photo};
-            storeData('user', result)
-            .catch(() => {
-                showMessage({
-                    message: "Uppss.. something wrong",
-                    description: "Local storage couldn't save",
-                    backgroundColor: MyColors.error,
-                    console: MyColors.white,
-                    type: 'default',
-                });
-            });
-            setProfile(result);
-        });
-    }, []);
-
+const HomeProfile = ({ photo, fullname, pekerjaan, onPress }) => {
     return (
         <View style={styles.container}>
             <TouchableOpacity onPress={onPress}>
-                <Image source={profile.photo} style={styles.avatar} />
+                <Image source={photo} style={styles.avatar} />
             </TouchableOpacity>
 
             <View>
-                <Text style={styles.name}>{profile.fullname}</Text>
-                <Text style={styles.jobs}>{profile.pekerjaan}</Text>
+                <Text style={styles.name}>{fullname}</Text>
+                <Text style={styles.jobs}>{pekerjaan}</Text>
             </View>
         </View>
     )

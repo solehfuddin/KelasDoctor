@@ -1,54 +1,33 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ILNullPhoto } from '../../assets'
 import { HeaderNav, Profile, List, GapSpace } from '../../components'
-import { getData, MyColors } from '../../utils'
-import {FireConfig} from '../../config'
+import { MyColors } from '../../utils'
+import { FireConfig } from '../../config'
 import { showMessage } from 'react-native-flash-message'
 
-const UserProfile = ({navigation}) => {
-    const [profile, setProfile] = useState({
-        fullname: 'Nama user',
-        pekerjaan: 'Pekerjaan',
-        photo: ILNullPhoto,
-    });
-
-    useEffect(() => {
-        getData('user').then(result => {
-            console.log('Async User profile', result);
-            const data = result;
-            if (result?.photo?.length > 1) {
-                data.photo =  {uri: result.photo};
-            }
-            else {
-                ILNullPhoto
-            };
-            // data.photo = {uri: result.photo};
-
-            setProfile(data);
-        });
-    }, []);
+const UserProfile = ({ navigation, route }) => {
+    const { fullname, pekerjaan, photo } = route.params;
 
     const signOut = () => {
         FireConfig.auth().signOut().then(() => {
             console.log('Signout success');
             navigation.replace('GetStarted');
         })
-        .catch(error => {
-            showMessage({
-                message: 'Uppss something wrong',
-                description: error.message,
-                backgroundColor: MyColors.error,
-                color: MyColors.white,
-                type: 'default'
+            .catch(error => {
+                showMessage({
+                    message: 'Uppss something wrong',
+                    description: error.message,
+                    backgroundColor: MyColors.error,
+                    color: MyColors.white,
+                    type: 'default'
+                });
             });
-        });
     };
     return (
         <View style={styles.page}>
-            <HeaderNav title='Profile' onPress={() => navigation.goBack()}/>
+            <HeaderNav title='Profile' onPress={() => navigation.goBack()} />
             <GapSpace gapHeight={15} />
-            <Profile name={profile.fullname} desc={profile.pekerjaan} photo={profile.photo}/>
+            <Profile name={fullname} desc={pekerjaan} photo={photo} />
             <GapSpace gapHeight={14} />
             <List
                 name='Edit profile'
